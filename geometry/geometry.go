@@ -3,7 +3,8 @@ package main
 
 import (
 	"fmt"
-	"geometry/rectangle" //importing package tùy chỉnh
+
+	"github.com/camli1803/Learn_GoLang/geometry/rectangle" //import package from github by module.
 )
 
 func main() {

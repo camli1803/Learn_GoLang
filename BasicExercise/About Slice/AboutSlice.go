@@ -13,5 +13,5 @@ func main() {
 	ChildSlice = ChildSlice[:cap(ChildSlice)]
 	fmt.Println("After re-slice:")
 	fmt.Println(ChildSlice)
-	fmt.Println("Length:", len(ChildSlice), "Capacity", cap(ChildSlice))
+	fmt.Println("Length:", len(ChildSlice), "Capacity:", cap(ChildSlice))
 }

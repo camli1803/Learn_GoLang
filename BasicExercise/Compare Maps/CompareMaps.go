@@ -6,9 +6,9 @@ import (
 
 func Comparetwomaps(map1, map2 map[string]int) {
 	check := true
-	if len(map1) == len(map2) {
+	if len(map1) == len(map2) { //check chiều dài đảm bảo mọi key trong map1 đều được kiểm tra trong map2 và ngược lại
 		for key, value := range map1 {
-			valuemap2, ok := map2[key] //check xem map2 có key đó giống map1 không. ok là biến check.
+			valuemap2, ok := map2[key] //check xem map2 có key đó giống map1 không, ok là biến check.
 			if ok == true {
 				if valuemap2 != value {
 					check = false

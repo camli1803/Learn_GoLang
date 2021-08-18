@@ -4,7 +4,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/camli1803/Learn_GoLang/geometry/rectangle" //import package from github by module.
+	"github.com/camli1803/Learn_Golang/geometry/rectangle" //import package from github by module.
 
 	"log"
 	_ "math" //Blank identifier

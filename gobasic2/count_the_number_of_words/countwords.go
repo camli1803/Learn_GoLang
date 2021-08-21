@@ -6,19 +6,36 @@ import (
 	"unicode/utf8"
 )
 
-func splitSentence(s string) []string { //Break the paragraph into sentences
-	sentenceSlice := strings.Split(s, ".")
-	return sentenceSlice
+func splitSentencebydot(s string) (sentenceSliceDot []string) { //Break the paragraph into sentences
+	sentenceSliceDot = strings.Split(s, ".")
+	return
 }
 
-func splitWord(s string) []string { // Break the paragraph into words
-	sentenceSlice := splitSentence(s) // Slice of sentences
-	wordSlice := make([]string, 0, 0)
-	for _, v1 := range sentenceSlice {
-		wordSlice = append(wordSlice, strings.Split(v1, " ")...) //slice of words
-
+func splitSentencebycommas(s string) (sentenceSlicecommas []string) {
+	sentenceSlicedot := splitSentencebydot(s)
+	for _, v1 := range sentenceSlicedot {
+		sentenceSlicecommas = append(sentenceSlicecommas, strings.Split(v1, ",")...)
 	}
-	return wordSlice
+	return
+}
+
+func splitWordAndStringNull(s string) (wordAndStringNullSlice []string) { // Break the paragraph into words
+	sentenceSlicecommas := splitSentencebycommas(s) // Slice of sentences
+	for _, v1 := range sentenceSlicecommas {
+		wordAndStringNullSlice = append(wordAndStringNullSlice, strings.Split(v1, " ")...)
+	}
+	return
+}
+
+func splitWord(s string) (wordSlice []string) {
+	wordAndStringNullSlice := splitWordAndStringNull(s)
+	for _, v1 := range wordAndStringNullSlice {
+		if v1 == "" {
+			continue
+		}
+		wordSlice = append(wordSlice, v1)
+	}
+	return
 }
 
 func checkwordinslice(s []string, word string) bool { //check word in slice(Array words)
@@ -38,7 +55,7 @@ func countword(s string) {
 	fmt.Println("Column 1: Word")
 	fmt.Println("Column 2: Number of characters of the word")
 	fmt.Println("Column 3: The number of occurrences of the word in the text")
-	fmt.Printf("%-10s%-10s%-10s\n", "Column 1", "Column 2", "Column 3")
+	fmt.Printf("%-15s%-10s%-10s\n", "Column 1", "Column 2", "Column 3")
 	for _, v1 := range wordSlice {
 		if checkwordinslice(wordhasbeencounted, v1) == true { // check if the word has been counted or not?
 			continue
@@ -50,13 +67,13 @@ func countword(s string) {
 				count += 1
 			}
 		}
-		fmt.Printf("%-10s%-10d%-10d\n", v1, utf8.RuneCountInString(v1), count)
+		fmt.Printf("%-15s%-10d%-10d\n", v1, utf8.RuneCountInString(v1), count)
 	}
 }
 
 func main() {
-	//text := "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-	text := "Cẩm Li xinh gái"
+	text := "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 	textLower := strings.ToLower(text)
 	countword(textLower)
+
 }

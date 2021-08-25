@@ -1,45 +1,87 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-type SalaryCaculator interface { //tạo 1 interface để tính lương cho từng kiểu đối tượng
-	CaculateSalary() int // SalaryCaculator là kiểu đối tượng tổng quát
-}
-
-type Permanent struct { // nhân viên chính thức có lương cơ bản và lương thưởng
-	emId     int
-	basicpay int
-	pf       int
-}
-
-type Contract struct { // nhân viên hợp đồng chỉ có lương cơ bản
-	emId     int
-	basicpay int
-}
-
-//Viết cách tính lương cho nhân viên chính thức.
-func (p Permanent) CaculateSalary() int {
-	return p.basicpay + p.pf
-}
-
-// Viết cách tính lương cho nhân viên hợp đồng.
-func (c Contract) CaculateSalary() int {
-	return c.basicpay
-}
-
-// Viết hàm tính lương tổng cho kiểu đối tượng tổng quát SalaryCaculator
-func totalExpense(s []SalaryCaculator) int {
-	expense := 0
-	for _, v := range s {
-		expense += v.CaculateSalary()
+func digits(a int, digitchan chan int) {
+	for a != 0 {
+		digitnum := a % 10
+		digitchan <- digitnum
+		a /= 10
 	}
-	return expense
+	close(digitchan)
+}
+func calSquare(a int, squarechan chan int) {
+	digital := make(chan int)
+	go digits(a, digital)
+	sum := 0
+	for digit := range digital {
+		sum += digit * digit
+	}
+	squarechan <- sum
+
+}
+func calCubes(a int, cubeschan chan int) {
+	digital := make(chan int)
+	go digits(a, digital)
+	sum := 0
+	for digit := range digital {
+		sum += digit * digit * digit
+	}
+	cubeschan <- sum
+}
+func main() {
+	a := 589
+	squarechan := make(chan int)
+	cubeschan := make(chan int)
+	go calSquare(a, squarechan)
+	go calCubes(a, cubeschan)
+	squarechanint := <-squarechan
+	cubeschanint := <-cubeschan
+	fmt.Println(squarechanint + cubeschanint)
+}
+
+/*package main
+
+import (
+	"fmt"
+)
+
+func digits(number int, dchnl chan int) {
+	for number != 0 {
+		digit := number % 10
+		dchnl <- digit
+		number /= 10
+	}
+	close(dchnl)
+}
+func calcSquares(number int, squareop chan int) {
+	sum := 0
+	dch := make(chan int)
+	go digits(number, dch)
+	for digit := range dch {
+		sum += digit * digit
+	}
+	squareop <- sum
+}
+
+func calcCubes(number int, cubeop chan int) {
+	sum := 0
+	dch := make(chan int)
+	go digits(number, dch)
+	for digit := range dch {
+		sum += digit * digit * digit
+	}
+	cubeop <- sum
 }
 
 func main() {
-	p1 := Permanent{1, 5000, 20}
-	p2 := Permanent{2, 6000, 30}
-	c3 := Contract{3, 3000}
-	s := []SalaryCaculator{p1, p2, c3}
-	fmt.Printf("Total Expense: $%d", totalExpense(s))
-}
+	number := 589
+	sqrch := make(chan int)
+	cubech := make(chan int)
+	go calcSquares(number, sqrch)
+	go calcCubes(number, cubech)
+	squares, cubes := <-sqrch, <-cubech
+	fmt.Println("Final output", squares+cubes)
+} */
